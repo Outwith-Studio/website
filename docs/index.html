@@ -410,6 +410,7 @@
     <p>We work on products, tools, and ideas for people and organisations who insist on being the authors of their best work.</p>
     <p>We’re interested in the fine line between what technology enables and what it degrades: optimising for how we can participate more deliberately in the world.</p>
     <p>Our first product is _Truffle_—a platform that helps people to ask better questions.</p>
+    <p>Outwith is Monica Park, Calum Forsyth and Michael Heins.</p>
     <p>Join the journey.</p>
   </div>
 
@@ -722,7 +723,12 @@
   // The published copy may carry markup (*italic*, _bold_): read it as written and lay it out styled.
   const RAW_COPY = [...document.querySelectorAll('#source p')].map(p => p.textContent.trim().replace(/\s+/g, ' ')).join('\n\n');
   setCopy(RAW_COPY);
-  var notes = [];          // linked notes, filled from the shared store (see below)
+  // Fixed links for the live site (outwith.to has no shared note store). Paragraph p4 is the team line.
+  var notes = [
+    { id: 'team-monica',  el: 'p4', phrase: 'Monica Park',   url: 'https://monicaspark.com' },
+    { id: 'team-calum',   el: 'p4', phrase: 'Calum Forsyth', url: 'https://tanislabs.com' },
+    { id: 'team-michael', el: 'p4', phrase: 'Michael Heins', url: 'https://www.moreyum.com' },
+  ];
   var linesStale = true;   // rebuild the line elements (new layout or notes changed)
   var onPlaced = null;     // keeps an open note beside its phrase as the lines move
   var onLines = null;      // redraws the side column of notes when the lines are rebuilt
