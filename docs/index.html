@@ -2418,16 +2418,17 @@
           e.preventDefault();
           var email = input.value.trim();
           if (!email) { say('Pop an address in first.', 'error'); input.focus(); return }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('That does not look like an email address.', 'error'); input.focus(); return }
           button.disabled = true; say('One moment.');
-          fetch('/.netlify/functions/subscribe', {
+          // The site is on GitHub Pages, which cannot run the beehiiv function, so this posts to the
+          // function still deployed on Netlify (outwith.netlify.app). It sends a plain form post in
+          // no-cors mode: the subscription goes through, but the browser cannot read the reply, so
+          // success is shown once the request is sent. Do not cancel the Netlify site while this is in use.
+          fetch('https://outwith.netlify.app/.netlify/functions/subscribe', {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ email: email })
-          }).then(function (r) { return r.json().catch(function () { return { ok: false, message: 'Something went wrong.' } }) })
-            .then(function (d) {
-              if (d.ok) { form.hidden = true; say(d.message || 'You are on the list.') }
-              else { say(d.message || 'Something went wrong.', 'error'); button.disabled = false }
-            })
+            mode: 'no-cors',
+            body: new URLSearchParams({ email: email })
+          }).then(function () { form.hidden = true; say('You are on the list.') })
             .catch(function () { say('Could not reach us. Try again shortly.', 'error'); button.disabled = false });
         });
       });
